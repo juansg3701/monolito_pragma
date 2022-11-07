@@ -27,10 +27,6 @@ public class PersonRestController {
     @GetMapping("/persons/{personId}")
     public Person getPerson(@PathVariable int personId) {
         Person person = personService.findById(personId);
-
-        if(person == null) {
-            throw new RuntimeException("Persona no encontrada - " + personId);
-        }
         return person;
     }
 

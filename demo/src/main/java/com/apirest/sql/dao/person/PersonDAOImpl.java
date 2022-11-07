@@ -33,25 +33,42 @@ public class PersonDAOImpl implements PersonDAO {
     }
 
     @Override
-    public void save(Person person) {
+    public Person save(Person person) {
         Session currentSession = entityManager.unwrap(Session.class);
-        currentSession.save(person);
+        Person person_return = new Person();
+        try {
+            currentSession.save(person);
+            return person;
+        }catch (Exception e) {
+            return person_return;
+        }
+
     }
 
     @Override
     @Transactional
-    public void update(Person person) {
+    public Person update(Person person) {
         Session currentSession = entityManager.unwrap(Session.class);
-        //currentSession.update(person);
-        currentSession.update(person);
+        Person person_return = new Person();
+        try {
+            currentSession.update(person);
+            return person;
+        }catch (Exception e){
+            return person_return;
+        }
     }
 
     @Override
     @Transactional
-    public void delete(int id ) {
+    public boolean delete(int id ) {
         Session currentSession = entityManager.unwrap(Session.class);
         Query<Person> theQuery = currentSession.createQuery("delete from Person where id=:idPerson");
-        theQuery.setParameter("idPerson", id);
-        theQuery.executeUpdate ();
+        try{
+            theQuery.setParameter("idPerson", id);
+            theQuery.executeUpdate ();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 }

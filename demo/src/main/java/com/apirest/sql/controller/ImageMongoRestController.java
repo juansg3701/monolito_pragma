@@ -102,7 +102,7 @@ public class ImageMongoRestController {
                 } catch (IOException e) {
                     throw new RuntimeException("Error al guardar la imagen: " + e.getMessage());
                 }
-                imageMongoService.save(imagen_encontrada);
+                imageMongoService.update(imagen_encontrada);
             }
 
 

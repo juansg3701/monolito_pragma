@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -24,6 +25,9 @@ public class ImageMongoServiceImpl implements ImageMongoService {
     @Override
     public Optional<ImageMongo> findById(String id) {
         Optional<ImageMongo> image_imprimir =  imageMongoDAO.findById(id);
+        if(image_imprimir==null){
+            throw new NoSuchElementException();
+        }
         return image_imprimir;
     }
 
@@ -31,14 +35,6 @@ public class ImageMongoServiceImpl implements ImageMongoService {
     public List<ImageMongo> findListByPerson(int personId) {
         return imageMongoDAO.findAllByPerson(personId);
     }
-    /**
-
-    @Override
-    public Optional<ImageMongo> findByName(String name) {
-       // Optional<ImageMongo> image_imprimir =  imageMongoDAO.findByNe;
-        //return image_imprimir;
-    }
-     */
 
     @Override
     public ImageMongo save(ImageMongo image) {
@@ -46,12 +42,17 @@ public class ImageMongoServiceImpl implements ImageMongoService {
     }
 
     @Override
-    public void update(String id, ImageMongo image) {
-        //imageMongoDAO.update(id, image);
+    public ImageMongo update(ImageMongo image) {
+        return imageMongoDAO.save(image);
     }
 
     @Override
-    public void delete(String id) {
-        imageMongoDAO.deleteById(id);
+    public boolean delete(String id) {
+        try {
+            imageMongoDAO.deleteById(id);
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
     }
 }

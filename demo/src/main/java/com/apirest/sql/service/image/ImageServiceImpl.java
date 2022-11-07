@@ -2,6 +2,7 @@ package com.apirest.sql.service.image;
 
 
 import com.apirest.sql.entity.Image;
+import com.apirest.sql.exception.EmptyInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -11,6 +12,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Repository
 public class ImageServiceImpl implements ImageService {
@@ -28,50 +30,45 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image findById(int id) {
         Image Image = ImageDAO.findById(id);
+        if(Image==null){
+            throw new NoSuchElementException();
+        }
         return Image;
     }
 
     @Override
-    public void save(Image image) {
-        ImageDAO.save(image);
-    }
+    public Image save(Image image) {
 
-    /*
-    @Override
-    public boolean saveImage(MultipartFile image) {
-        boolean state_returnt = false;
-        try{
-            Files.copy(image.getInputStream(), this.root.resolve(image.getOriginalFilename()));
-            state_returnt = true;
-        }catch(Exception e){
-            throw new RuntimeException("No se puede guardar la imagen" + e.getMessage());
+        if(image.getExtension().isEmpty() ||
+                image.getExtension().isEmpty() ||
+                image.getUrl().isEmpty() ||
+                image==null) {
+            throw new EmptyInputException();
         }
-        return state_returnt;
+            ImageDAO.save(image);
+            return image;
+
     }
-    */
 
-
-    public Resource load(String filename){
-        try{
-            Path file = root.resolve(filename);
-            Resource resource = new UrlResource(file.toUri());
-            if(resource.exists() || resource.isReadable()){
-                return resource;
-            }else{
-                throw new RuntimeException("No se pudo leer el archivo");
-            }
-        }catch(MalformedURLException e){
-            throw new RuntimeException("Error: "  + e.getMessage());
+    @Override
+    public Image update(Image Image) {
+        Image image_send = new Image();
+        try {
+            ImageDAO.update(Image);
+            return Image;
+        }catch (Exception e) {
+            return image_send;
         }
     }
 
     @Override
-    public void update(Image Image) {
-        ImageDAO.update(Image);
-    }
+    public boolean deleteById(int id) {
+        try {
+            ImageDAO.delete(id);
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
 
-    @Override
-    public void deleteById(int id) {
-        ImageDAO.delete(id);
     }
 }

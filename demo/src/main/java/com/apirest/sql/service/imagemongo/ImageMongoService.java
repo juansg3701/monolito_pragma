@@ -11,6 +11,6 @@ public interface ImageMongoService {
     public List<ImageMongo> findListByPerson(int id);
     //public Optional<ImageMongo> findByName(String name);
     public ImageMongo save(ImageMongo image);
-    public void update(String id, ImageMongo image);
-    public void delete(String id);
+    public ImageMongo update(ImageMongo image);
+    public boolean delete(String id);
 }

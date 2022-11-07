@@ -44,8 +44,15 @@ public class Person {
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "type_document_id", insertable = true, updatable = true, nullable = false)
+    private TypeDocument type_document = new TypeDocument();
 
+    public int getType_document() {
+        return type_document.getId();
+    }
 
-
-
+    public void setType_document(TypeDocument type_document) {
+        this.type_document = type_document;
+    }
 }

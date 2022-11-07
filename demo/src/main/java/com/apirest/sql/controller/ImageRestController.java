@@ -32,10 +32,6 @@ public class ImageRestController {
     @GetMapping("/images/{ImageId}")
     public Image getImage(@PathVariable int ImageId) {
         Image image = imageservice.findById(ImageId);
-
-        if(image == null) {
-            throw new RuntimeException("Imagen no encontrada - " + ImageId);
-        }
         return image;
     }
 
